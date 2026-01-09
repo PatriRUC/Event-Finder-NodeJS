@@ -2,5 +2,4 @@ Application developed mainly by NodeJS that allows users to search events, view 
 
 To run this app: node server.js
 
-
-![5c73e81f95f41e4d8630f954766f4a16](https://github.com/user-attachments/assets/121e45c7-fcd8-40fa-a43b-2fac822f4ec5)
+<img width="1405" height="435" alt="ebc3799dfc4740c4dc22937f75588e56" src="https://github.com/user-attachments/assets/780017d4-5e08-4101-8c0f-d7ba01b05dd1" />
