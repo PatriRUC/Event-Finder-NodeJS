@@ -1,0 +1,968 @@
+body {
+  font-family: serif; 
+  margin: 0;
+}
+
+#header {
+  position: fixed;
+  top: 0;                   /* 顶部位置 */
+  left: 0;
+  width: 100%;
+  margin: 0 auto;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 1000;            /* 保证在所有元素之上 */
+  
+}
+
+#header-1 {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  margin-bottom: 0;
+}
+
+
+#h2_1 {
+  display: inline-block;
+  margin-top: 15px;
+}
+
+#btnSearchPage {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.page-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: gray;
+  height: 40px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;   /* 垂直居中图标和文字 */
+  gap: 6px;              /* 图标与文字间距 */
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.page-btn.active {
+  color: black
+}
+
+hr {
+  background-color: gray;
+  width: 100%;
+  margin-top: 0;
+}
+
+/* 搜索区内容容器 */
+#searchPage {
+  width: 70%;
+  margin: 0 auto;              /* ✅ 居中 */
+  padding-bottom: 10px;
+  margin-top: 90px;
+}
+
+#searchForm {
+  display: flex;
+  flex-wrap: wrap;             /* ✅ 宽度不够时自动换行 */
+  gap: 10px;                   /* ✅ 每个块之间留出空隙 */
+  justify-content: space-between; /* ✅ 让块平均分布整行 */
+  align-items: flex-start;
+  width: 100%;                 /* ✅ form 占满容器 */
+  box-sizing: border-box;
+  
+}
+
+/* 每个输入块的布局 */
+.search-block {
+  display: flex;
+  flex-direction: column;      /* label → input → error 垂直排列 */
+  align-items: flex-start;
+  min-width: 180px;            /* ✅ 太窄时强制换行 */
+  box-sizing: border-box;
+}
+
+/* label */
+.search-block label {
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+/* input / select */
+.search-block input,
+.search-block select {
+  width: 100%;                 /* ✅ 输入框宽度填满当前块 */
+  box-sizing: border-box;
+  padding: 2px 3px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  font-size: 14px;
+  padding-left: 5px;
+  height: 25px;
+}
+
+#keyword-block input, #catagory-block select, #distance-block input {
+  margin-top: 4px;
+}
+.location-header {
+  display: flex;
+  justify-content: space-between; /* ✅ 左右分布 */
+  align-items: center;            /* ✅ 垂直居中 */
+  width: 100%;                    /* 占满整行，确保对齐 */
+}
+
+.auto-detect-group {
+  display: flex;
+  align-items: center;            /* ✅ label 和 switch 垂直居中 */
+  gap: 6px;                       /* ✅ label 和开关之间留一点间距 */
+}
+
+/* 搜索按钮 */
+#searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  height: 35px;
+  box-sizing: border-box;
+  margin-top: 18px;
+}
+
+#searchBtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+#keyword-block { flex: 2; }     /* 占2份 */
+#category-block { flex: 1; }    /* 占1份 */
+#location-block { flex: 2; }
+#distance-block { flex: 1; }
+#searchBtn { flex: 1; }
+
+
+/* 响应式：屏幕变窄时一行容纳更少块 */
+@media (max-width: 1200px) {
+  .search-block, #searchBtn {
+    flex: 1 1 calc(45% - 10px);  /* 一行 2 个 */
+  }
+}
+
+@media (max-width: 1000px) {
+  .search-block, #searchBtn {
+    flex: 1 1 100%;              /* 一行一个，独占整行 */
+  }
+}
+
+
+
+.required::after {
+  content: " *";    /* 添加星号 */
+  color: red;       /* 星号颜色 */
+  font-weight: bold; /* 加粗 */
+}
+
+
+.input-with-clear {
+  position: relative;
+  display: block;       /* ✅ 不要 inline-block，让它占整行 */
+  width: 100%;          /* ✅ 撑满父容器 */
+}
+
+.input-with-clear input {
+  line-height: 30px;        /* ✅ 垂直对齐 */
+  padding-right: 50px;
+  box-sizing: border-box;
+  width: 100%;          /* ✅ 让 input 填满容器 */
+  padding-right: 50px;  /* 留空间给图标 */
+}
+
+/* 两个图标的通用样式 */
+.clear-btn,
+.toggle-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  color: #777;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* 默认隐藏但保留位置 */
+.clear-btn {
+  right: 30px;
+  visibility: hidden; /* ✅ 用visibility取代display */
+}
+
+.toggle-btn {
+  right: 6px;
+}
+
+.clear-btn svg,
+.toggle-btn svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+
+
+.suggest-box {
+  position: absolute;
+  top: 100%;           /* ✅ 紧贴输入框底部 */
+  left: 0;             /* ✅ 左边对齐 */
+  width: 100%;         /* ✅ 宽度与输入框一致 */
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;    /* ✅ 可选：让边框无缝连接输入框 */
+  box-sizing: border-box;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  z-index: 100;
+}
+
+.suggest-item {
+  padding: 6px;
+  cursor: pointer;
+}
+
+.suggest-item:hover {
+  background-color: #eee;
+}
+
+
+
+.error-input {
+    border: 1px solid red !important;
+}
+.error-label {
+    color: red;
+}
+
+/* 错误提示 */
+.error-message {
+  margin-top: 4px;
+  color: red;
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: left;
+}
+
+
+
+
+
+/* 🔘 开关样式 */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  vertical-align: middle;
+  margin-bottom: 2px;
+
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .3s;
+  border-radius: 22px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px; width: 16px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: black
+}
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+/* ---------- Event Card Layout ---------- */
+#resultContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 15px;
+  margin-top: 35px;
+  align-items: center;
+}
+
+#no-result {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+#no-result-1 {
+  font-size: 40px;
+}
+
+#no-result-2 {
+  font-size: 20px;
+  color: gray;
+  margin-top: 5px;
+}
+
+#no-result-3 {
+  font-size: 15px;
+  color: gray;
+}
+
+/* Card */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  height: 250px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+/* Card top (image) */
+.event-img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+}
+
+/* Badges */
+.badge {
+  position: absolute;
+  top: 8px;
+  padding: 5px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: black
+}
+.badge-genre {
+  left: 8px;
+  background-color: white;
+}
+.badge-date {
+  right: 8px;
+  background-color: white;
+}
+
+/* Bottom block */
+.event-info {
+  height: 20%;
+  padding: 6px 8px;
+  display: flex; 
+}
+
+.event-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.event-venue {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favorite-icon {
+  display: inline-flex;           /* 让里面的 SVG 居中 */
+  justify-content: center;
+  align-items: center;
+  width: 25px;                    /* 正方形 */
+  height: 25px;
+  border: 2px solid #ddd;         /* 边框颜色 */
+  border-radius: 5px;            /* 圆角 */
+  background-color: white;        /* 背景色，可改成透明 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+  width: 70%;
+  margin: 0 auto;
+}
+
+#no-fav {
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+#no-fav-1 {
+  font-size: 25px;
+  color: gray;
+}
+
+#no-fav-2 {
+  font-size: 15px;
+  color: gray;
+  margin-top: 5px;
+}
+
+
+/* Responsive fallback */
+@media (max-width: 1200px) {
+  #resultContainer, #favoritesContainer{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+@media (max-width: 1000px) {
+  #resultContainer, #favoritesContainer {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+}
+
+/* ---------- Details Page ---------- */
+#detailsPage {
+  width: 100%;
+  text-align: center;
+  margin-top: 100px;
+}
+
+#details-header {
+  display: flex;
+  width: 70%;
+  margin: 0 auto;
+}
+
+
+
+#detailsFavorite{
+
+  margin-top: 10px;
+}
+
+#details-header .favorite-icon {
+  font-size: 26px;
+  cursor: pointer;
+}
+
+#details-header .favorite-icon:hover {
+  transform: scale(1.2);
+}
+
+
+/* Back Button */
+.back-btn {
+  cursor: pointer;
+  font-size: 14px;
+  text-align: left;
+  width: 70%;
+  color: rgb(80, 78, 78);
+  margin: 0 auto;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+#buy_ticket ,#spotify{ 
+  background-color: black;
+  color: white;
+  padding: 10px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  height: 15px;
+  margin-left: auto;
+  margin-right: 10px;
+  margin-top: 10px;
+
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  
+}
+
+/* Tabs Container */
+.tabs {
+  justify-content: center;  /* ✅ 居中 Tabs */
+  margin-top: 10px;
+  background-color: #eee;
+  width: 70%;
+  margin: 0 auto;
+  border-radius: 6px;
+  justify-content: center;
+  display: flex;                 /* ✅ 让子元素水平排列 */
+  justify-content: space-between;/* ✅ 三个 tab 平均分 */
+}
+
+/* Tab Button */
+.tab {
+  background-color: #eee;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  width: 33%;
+  height: 20px;
+  color: black;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  flex: 1;                       /* ✅ 每个 tab 均分父容器宽度 */
+}
+
+
+.tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tab.active {
+  background-color: white;
+}
+
+#status {
+  padding: 3px 5px;
+  border-radius: 5px;
+  display: inline-block;
+  color: white;
+}
+
+#info-content {
+  width: 70%;
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 5%;
+
+}
+
+/* 左栏 */
+#info-text {
+  width: 40%;
+  text-align: left;
+
+}
+
+/* 右栏 */
+#info-img {
+  width: 40%;
+
+  display: flex;               /* ✅ 让内部图片参与 flex 计算 */
+  justify-content: center;     /* ✅ 水平居中（可选） */
+}
+
+#info-img img {
+  width: 100%;                 /* ✅ 占满 info-img */
+  height: auto;
+  border-radius: 8px;
+}
+
+/* ✅ 窄屏改为上下布局 */
+@media (max-width: 1000px) {
+  #info-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  #info-text,
+  #info-img {
+    width: 100%;               /* ✅ 两栏都占 info-content 整行 */
+    text-align: left;
+  }
+
+  #info-img img {
+    width: 100%;               /* ✅ 撑满 info-content 的 70% 宽度 */
+    border-radius: 0;
+  }
+}
+
+
+.info-key, .venue-key{
+  color: rgb(80, 78, 78);
+  margin: 0;
+}
+
+.info-value, .venue-value{
+  margin: 0 auto 12px auto;
+}
+
+/* container 横向排列 */
+#fb-tt {
+  display: flex;
+  gap: 12px;      /* 图标间距 */
+  margin-top: 10px;
+}
+
+/* 图标样式 */
+.social-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid #ccc;  /* 灰色边框 */
+  border-radius: 8px;         /* 圆角，可改为50%做圆形 */
+  text-decoration: none;
+}
+
+/* Lucide 图标颜色与大小 */
+.social-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: black;  /* 线条颜色 */
+}
+
+/* Hover 效果（可选）*/
+.social-icon:hover {
+  border-color: #666;
+  background-color: #f2f2f2;
+  transform: scale(1.08);
+  transition: 0.18s;
+}
+
+
+
+
+/* 右边图片栏 */
+#info-img {
+  width: 55%;                 
+  display: flex;
+  flex-direction: column; /* 垂直排列 */
+  justify-content: center;
+  text-align: left;
+}
+
+/* 座位图样式 */
+#info-img img {
+  width: 100%;                /* 自适应宽度 */
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+#artist-content {
+  width: 70%;               /* 左右间距 */
+  margin: 10px auto;
+  text-align: left; /* double insurance */
+}
+
+/* Artist Top Info */
+
+.artist-info {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  text-align: left; /* double insurance */
+  gap: 20px;
+}
+
+#artist-key> *:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.artist-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Albums Grid */
+#albumsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+/* 限制大屏幕最多 4 列 */
+
+@media (max-width: 1600px) {
+  #albumsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  #albumsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  #albumsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  #albumsGrid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.album-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  padding: 10px;
+  text-align: left;
+}
+
+.album-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.album-name {
+  font-weight: bold;
+  margin: 6px 0 3px;
+  font-size: 14px;
+}
+
+.album-date {
+  font-size: 12px;
+  color: #666;
+}
+
+#venue-content {
+  margin: 10px auto;
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  gap: 5%;
+  align-items: flex-start;
+}
+
+/* 左列 */
+#venue-col1 {
+  width: 35%;
+  text-align: left;
+  padding-top: 0;
+}
+
+#venue-col1 img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+/* 右列 */
+#venue-col2 {
+  width: 60%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* ✅ 当屏幕变窄时，上下排列并占满整行 */
+@media (max-width: 1000px) {
+  #venue-content {
+    flex-direction: column;  /* 垂直排列 */
+    align-items: stretch;    /* ✅ 子元素宽度撑满父容器 */
+    gap: 10px;               /* 可适当调小间距 */               /* ✅ 上下间距 */
+  }
+
+  #venue-col1,
+  #venue-col2 {
+    width: 100%;              /* ✅ 每个都占满整行 */
+    text-align: left;
+  }
+
+  #venue-col1 img {
+    width: 100%;
+    border-radius: 0;         /* ✅ 可选：让图片两边贴合屏幕 */
+  }
+}
+
+
+#venue-link {
+  margin-left: auto;
+  border-radius: 5px;
+  border: 1px solid gray;
+  text-decoration: none;
+  padding: 5px 5px;
+  color: black;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+}
+
+#venue-link svg {
+  width: 18px;
+  height: 18px;
+  stroke: black;  /* 线条颜色 */
+}
+
+#map-link {
+  
+  color: gray;
+  text-decoration: none;
+  justify-content: center;
+  display: inline-flex;
+  gap: 4px;
+}
+
+#map-link svg {
+  width: 15px;
+  height: 15px;
+  stroke: gray;  /* 线条颜色 */
+}
+
+.icon-heart {
+  width: 15px;
+  height: 15px;
+  fill: none;         /* 空心状态 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-heart:hover {
+  transform: scale(1.2);
+}
+
+.icon-heart.filled {
+  fill: red;          /* 实心状态 */
+  stroke: red;
+}
+
+/* Toast 容器 */
+#toastContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2000;
+}
+
+/* 单个 Toast 样式 */
+.toast {
+  width: 300px;                 /* 固定宽度 */
+  color: black;              /* 建议改成白色以确保对比 */
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.4s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  /* ✅ 允许换行显示 */
+  white-space: normal;          /* 允许文字自动换行 */
+  word-wrap: break-word;        /* 长单词强制断行 */
+  word-break: break-word;       /* 兼容性好一些 */
+
+}
+
+
+/* 出现动画 */
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 成功与错误状态样式 */
+.toast.success {
+  background-color: white;
+}
+.toast.error {
+  background-color: #e74c3c; /* 红色 */
+}
+.toast.info {
+  background-color: blue;
+}
+
+
+
+.undo-btn {
+  margin-left: 10px;
+  background-color: black;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  border-radius: 5px;
+  height: 25px;
+  width: 60px;
+  font-size: 90%;
+  margin-right: auto;
+}
+
+.toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  border-radius: 50%;     /* 让正方形变成圆形 */
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;      /* 图标与文字间距 */
+  flex-shrink: 0;         /* 防止被压缩 */
+}
+
+.toast-icon svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2;        /* 让线条更明显 */
+}
+
+
+

@@ -1,0 +1,7 @@
+runtime: nodejs20
+
+env_variables:
+  GOOGLE_API_KEY: "AIzaSyAoF9K80AmRLSq8BXcJvIJ-IA0EwpuIB_w"
+  TICKETMASTER_API_KEY: "LlrRfYQsMaRIIcvk127MTDu0SWurP6DV"
+  MONGODB_URI: "mongodb+srv://junge_ass3:pjg020424@cluster0.9iatajv.mongodb.net/?appName=Cluster0"
+  MONGODB_DB: "HW3"

@@ -1,0 +1,123 @@
+(I composed most of my code with the help of AI and most of the time it gave me exactly whatever I want. Here are all the important issues that occurred.)
+
+1 ------------------------------------------------------------------------------------
+Prompt: I would like to add a feature: If the user fails to fill in the keyword or location, when they click the submit button, a text prompt will be displayed below the un-filled input field. The border of the input field and the corresponding label will also turn red, and the submission will be prevented.
+
+Issues: The code AI generated sent requests from HTML and check invalid input with JavaScript, which will refresh the page. 
+
+Fix: I combined the request sending and input checking together in the JavaScript and used fetch to get data. 
+
+Explanation: It's not a good practice to directly send request using HTML form, because it will reload the page every time and violate the AJAX methodology. 
+
+
+2 ------------------------------------------------------------------------------------
+Prompt: If the user fails to fill in the keyword or location, when they click the submit button, a text prompt will be displayed below the un-filled input field. The border of the input field and the corresponding label will also turn red, and the submission will be prevented.
+
+Issues: The code AI generated only hide the error message after the user submit the form again, but it's better that the error messages disappear immediately when the user starts to input something. 
+
+Fix: I added an event listener to every input area, so every time the user types something into them, the error messages hide. 
+
+Explanation: Event listeners are a common and useful way for real-time validation in JavaScript, which gives the users better feedback and searching experience.
+
+
+3 ------------------------------------------------------------------------------------ 
+Prompt: Now add a feature: "auto-detect location". There is a small toggle switch on the right side. If it is turned on, the location box will be disabled. If there was an error message before for the location, it will also be removed. The value of location will become an address obtained through the api of ipinfo.io.
+
+Issues: The code AI generated only disable the location input box when the toggle switch is on, but it didn't remove the error message if there was one before, and it didn't fetch the location from ipinfo.io.
+
+Fix: I added code to remove the error message when the toggle switch is turned on, and I used fetch to get the location from ipinfo.io and set the value of the location input box.
+
+Explanation: It's important to handle all possible states of the input fields to ensure a smooth user experience. Fetching the location from an external API requires asynchronous handling, which is effectively managed using JavaScript's fetch function.
+
+
+4 ------------------------------------------------------------------------------------
+Prompt: Please use the returned results to create the cards. There will be a total of 3 columns. Arrange them from left to right and from top to bottom, with the activity times listed from earliest to latest. Each card will have the following style: The upper part (about 70% of the card space) will be filled with the corresponding picture, a small circle in the upper left corner will indicate the category of the activity, and a small circle in the upper right corner will indicate the time of the activity; The lower part (about 30% of the card space) will have the activity name written in one line and the activity location written in the other line.
+
+Issues: The code AI generated created the cards but did not arrange them into 3 columns, and the styling of the cards did not match the specified design.
+
+Fix: I used CSS Grid to arrange the cards into 3 columns and styled the cards according to the specified design, including the placement of images, category indicators, time indicators, activity name, and location.
+
+Explanation: CSS Grid is a powerful layout system that allows for the creation of complex grid-based designs easily. Proper styling ensures that the cards are visually appealing and meet the design requirements.
+
+
+5 ------------------------------------------------------------------------------------
+Prompt: Please use the returned results to create the cards. There will be a total of 3 columns. Arrange them from left to right and from top to bottom, with the activity times listed from earliest to latest. Each card will have the following style: The upper part (about 70% of the card space) will be filled with the corresponding picture, a small circle in the upper left corner will indicate the category of the activity, and a small circle in the upper right corner will indicate the time of the activity; The lower part (about 30% of the card space) will have the activity name written in one line and the activity location written in the other line.
+
+Issues: It threw an error: Error contacting server: SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+
+Fix: I found that my front-end js didn't import findEvents() from search.js, so I added the import statement at the beginning of my front-end js file.
+
+Explanation: Importing the necessary functions is crucial for the front-end to communicate effectively with the back-end and handle data correctly. Without the proper imports, the front-end cannot execute the required logic to process and display the data.
+
+
+6 ------------------------------------------------------------------------------------
+Prompt: Now I need to implement a new feature: Each card on the search page is clickable. When clicked, the backend will retrieve the detailed data of the activity using the activity ID. The original page will be redirected to a new page. On the new page, there is a "<- back to search" button in the top left corner, which allows you to return to the original search page. Note that after returning to the search page, all the original input box content, card results, and page scroll position remain unchanged.
+
+Issues: The code AI generated redirected to the new page and fetched the detailed data, but when returning to the search page, all the original input box content, card results, and page scroll position were lost.
+
+Fix: I used the browser's session storage to save the input box content, card results, and scroll position before redirecting to the new page. When returning to the search page, I retrieved these values from session storage and restored them.
+
+Explanation: Using session storage allows for temporary data persistence across page reloads or redirects. This ensures that the user experience remains consistent and that all relevant information is preserved when navigating between pages.
+
+
+7 ------------------------------------------------------------------------------------
+Prompt: Now I need to implement a new feature: Each card on the search page is clickable. When clicked, the backend will retrieve the detailed data of the activity using the activity ID. The original page will be redirected to a new page. On the new page, there is a "<- back to search" button in the top left corner, which allows you to return to the original search page. Note that after returning to the search page, all the original input box content, card results, and page scroll position remain unchanged.
+
+Issues: After I clicked "back", the search page returned to the top and was no longer in its original position.
+
+Fix: I added code to save the scroll position in session storage before navigating to the detail page and restored it when returning to the search page.
+
+Explanation: Saving and restoring the scroll position enhances user experience by maintaining their context on the page, allowing them to continue from where they left off without having to manually scroll back to their previous position.
+
+
+8 ------------------------------------------------------------------------------------
+Prompt: The new page displays the event name, followed by three side-by-side Shadcn tabs. When the user clicks on the "Info" tab, the date, artist, genres, and ticket status information of the event will be listed below. Clicking on "Artist" will display the artist information, and clicking on "Venue" will display the venue information.
+
+Issues: The code AI generated created the tabs and displayed the information, but the layout was not side-by-side, and the styling did not match the Shadcn design.
+
+Fix: I used CSS Flexbox to arrange the tabs side-by-side and applied the Shadcn styling to the tabs and content areas to match the design specifications.
+
+Explanation: CSS Flexbox is an efficient way to create flexible and responsive layouts. Applying consistent styling ensures that the user interface adheres to the desired design language, providing a cohesive user experience.
+
+
+9 ------------------------------------------------------------------------------------
+Prompt: I now want to add two items in the "info" tab. One is to insert "artist" between "date" and "venue", and multiple artists should be separated by commas. If there is no artist, write "N/A". The second is that the corresponding text and background color of "Ticket Status" should be the same as "details.Ticket_Status", which is the value corresponding to "statusSet".
+
+Issues: The code AI generated added the artist information and ticket status, but it did not handle the case where there are multiple artists or when there is no artist. Additionally, the ticket status colors did not match the specified design.
+
+Fix: I modified the code to handle multiple artists and no artist cases, and I ensured that the ticket status colors match the specified design.
+
+Explanation: Handling multiple artists and no artist cases ensures that the information is displayed correctly regardless of the data. Matching the ticket status colors with the specified design enhances visual consistency and user experience.
+
+
+10 ------------------------------------------------------------------------------------
+Prompt: I now want to set up a new route: app.get('/artist'). Its function is to input the name of an artist and obtain some basic information (for now, you only need to return a few basic pieces of information for testing purposes). Then, on the 'artist' tab, if the artist name is not empty, use this route to return the information of the first artist and display it; for other artists, no action is required.
+
+Issues: The code AI generated created the new route and fetched the artist information, but it did not handle the case where the artist name is empty, and it did not display the information correctly on the 'artist' tab.
+
+Fix: I added a check for an empty artist name before making the fetch request, and I ensured that the artist information is displayed correctly on the 'artist' tab.
+
+Explanation: Validating input before making requests prevents unnecessary server calls and potential errors. Properly displaying the fetched information ensures that users can see the relevant artist details as intended.
+
+
+11 ------------------------------------------------------------------------------------
+Prompt: How can I make the <div id="venue-img"> and <div id="venue-text"> arranged side by side?
+
+Issues: The code AI generated did not arrange the <div id="venue-img"> and <div id="venue-text"> side by side.
+
+Fix: I used CSS Flexbox to arrange the two divs side by side by setting the parent container's display property to flex.
+
+Explanation: CSS Flexbox is a powerful layout module that allows for easy alignment and distribution of space among items in a container, making it ideal for arranging elements side by side.
+
+
+12 ------------------------------------------------------------------------------------
+Prompt: I want to apply Ticketmaster suggest API on the keyword input box. 
+
+Issues: I hope that when the user clicks on any other part of the screen, the suggestion list will disappear, but the suggestion list just stays there.
+
+Fix: I added an event listener to the document that listens for click events. When a click occurs outside the keyword input box or the suggestion list, the suggestion list is hidden.
+
+Explanation: Adding a global click event listener allows us to detect clicks outside specific elements and perform actions such as hiding suggestion lists, enhancing the user experience by keeping the interface clean and responsive.
+
+
+(Apart from matters above, the AI is generally able to correctly answer my questions and meet my needs.)

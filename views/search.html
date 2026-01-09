@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Events Search</title>
+  <link rel="stylesheet" href="search.css">
+  <script type="module" src="https://unpkg.com/lucide@latest/dist/esm/lucide.js"></script>
+
+</head>
+<body>
+  <div id="header">
+    <div id="header-1">
+      <h2 id="h2_1">Events Around</h2>
+      <button id="btnSearchPage" class="page-btn active"><i data-lucide="search"></i> Search</button>
+      <button id="btnFavPage" class="page-btn"><i data-lucide="heart"></i> Favorites</button>
+    </div>
+    <hr style="margin-top: 0;">
+  </div>
+  
+  <div id="searchPage">
+    <form id="searchForm">
+      <div class="search-block" id="keyword-block">
+        <label for="keyword" id="label_keyword" class="required">Keyword</label>
+        <div class="input-with-clear">
+          <input type="text" id="keyword" name="keyword" placeholder="Search for events...">
+          <span id="clearKeyword" class="clear-btn"> <i data-lucide="x"></i></span>
+          <span id="toggleSuggest" class="toggle-btn"><i data-lucide="chevron-down"></i></span>
+          <div id="suggestions" class="suggest-box"></div>
+        </div>
+        
+        <div id="error_keyword" class="error-message" style="display: none;">Please enter some keywords</div>
+        
+      </div>
+      
+      <div class="search-block" id="catagory-block">
+        <label for="category" id="label_category" class="required">Category</label>
+        <select id="category" name="category">
+          <option value="Default">All</option>
+          <option value="Music">Music</option>
+          <option value="Sports">Sports</option>
+          <option value="Arts & Theatre">Arts & Theatre</option>
+          <option value="Film">Film</option>
+          <option value="Miscellaneous">Miscellaneous</option>
+        </select>
+      </div>
+
+      <div class="search-block" id="location-block">
+        <div class="location-header">
+          <label for="location" id="label_location" class="required">Location</label>
+
+          <div class="auto-detect-group">
+            <label id="label_autoDetect">Auto-Detect location</label>
+            <label class="switch">
+              <input type="checkbox" id="autoDetect">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <input type="text" id="location" name="location">
+        <div id="error_location" class="error-message" style="display: none;">Location is required when auto-detect is disabled</div>
+      </div>
+      
+      <div class="search-block" id="distance-block">
+        <label for="distance" id="label_distance" class="required">Distance</label>
+        <input type="number" id="distance" name="distance" placeholder="10">
+        <div id="error_distance_exceed" class="error-message" style="display: none;">Distance can not exceed 100 miles</div>
+      </div>
+      
+      <button type="submit" id="searchBtn"><i data-lucide="search"></i>Search Events</button><br>
+    </form>
+
+    <div id="resultContainer">
+      <div id=no-result>
+      <p id="no-result-1">🔍</p>
+      <p id="no-result-2">Enter search criteria and click the Search button to find events</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Details Page (hidden by default) -->
+<div id="detailsPage" style="display: none;">
+
+  <p id="backToSearch" class="back-btn">← Back to Search</p>
+
+  <div id="details-header">
+    <h2 id="detailsTitle"></h2>
+    
+    <a href="" id="buy_ticket" target="_blank">Buy Tickets <i data-lucide="external-link"></i></a>
+    <div id="detailsFavorite" class="favorite-icon"><i data-lucide="heart"></i></div>
+  </div>
+
+
+  <!-- Tabs -->
+  <div id="detailsTabs" class="tabs">
+    <button class="tab active" data-tab="info" id="tab_info">Info</button>
+    <button class="tab" data-tab="artist" id="tab_artist">Artist</button>
+    <button class="tab" data-tab="venue" id="tab_venue">Venue</button>
+  </div>
+
+  <!-- Tab Content -->
+  <div id="tabContent" style="margin-top: 20px;"></div>
+
+</div>
+
+<!-- ⭐ Favorites Page -->
+<div id="favoritesPage" style="display: none; margin-top: 85px;">
+  <h2 style="margin-left: 15%;">Your Favorites</h2>
+  <div id="favoritesContainer" class="fav-grid"></div>
+</div>
+
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+<script src="search.js"></script>
+</body>
+</html>
+
